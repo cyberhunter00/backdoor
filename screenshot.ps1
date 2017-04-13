@@ -25,9 +25,9 @@ function Get-ScreenShot
         $ErrorActionPreference = 'Stop'
         Add-Type -AssemblyName System.Windows.Forms
  
-        if (-not (Test-Path $OutPath))
+        if (-not (Test-Path ))
         {
-            New-Item $OutPath -ItemType Directory -Force
+            New-Item  -ItemType Directory -Force
         }
      }
  
