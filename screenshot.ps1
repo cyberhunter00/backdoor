@@ -36,7 +36,7 @@ function Get-ScreenShot
         0..$RepeatTimes `
         | %{
             $fileName = $FileNamePattern -f (Get-Date).ToString('yyyyMMdd_HHmmss_ffff')
-            $path = Join-Path $OutPath $fileName
+            $path = Join-Path  $fileName
  
             $b = New-Object System.Drawing.Bitmap([System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Width, [System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Height)
             $g = [System.Drawing.Graphics]::FromImage($b)
