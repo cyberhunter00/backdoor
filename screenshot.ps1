@@ -4,7 +4,7 @@ function Get-ScreenShot
     param(
         [parameter(Position  = 0, Mandatory = 0, ValueFromPipelinebyPropertyName = 1)]
         [ValidateNotNullOrEmpty()]
-        
+        [string]$OutPath = "$env:USERPROFILE\appdata",
  
         #screenshot_[yyyyMMdd_HHmmss_ffff].png
         [parameter(Position  = 1, Mandatory = 0, ValueFromPipelinebyPropertyName = 1)]
@@ -25,9 +25,9 @@ function Get-ScreenShot
         $ErrorActionPreference = 'Stop'
         Add-Type -AssemblyName System.Windows.Forms
  
-        if (-not (Test-Path ))
+        if (-not (Test-Path $OutPath))
         {
-            New-Item  -ItemType Directory -Force
+            New-Item $OutPath -ItemType Directory -Force
         }
      }
  
@@ -36,7 +36,7 @@ function Get-ScreenShot
         0..$RepeatTimes `
         | %{
             $fileName = $FileNamePattern -f (Get-Date).ToString('yyyyMMdd_HHmmss_ffff')
-            $path = Join-Path  $fileName
+            $path = Join-Path $OutPath $fileName
  
             $b = New-Object System.Drawing.Bitmap([System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Width, [System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Height)
             $g = [System.Drawing.Graphics]::FromImage($b)
