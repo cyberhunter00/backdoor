@@ -4,7 +4,7 @@ function Get-ScreenShot
     param(
         [parameter(Position  = 0, Mandatory = 0, ValueFromPipelinebyPropertyName = 1)]
         [ValidateNotNullOrEmpty()]
-        [string]$OutPath = "$env:USERPROFILE\Appdata\",
+        [string]$OutPath = "$env:USERPROFILE\Documents\ScreenShot",
  
         #screenshot_[yyyyMMdd_HHmmss_ffff].png
         [parameter(Position  = 1, Mandatory = 0, ValueFromPipelinebyPropertyName = 1)]
