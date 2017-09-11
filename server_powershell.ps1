@@ -1,4 +1,4 @@
-$port=8000
+$port=4444
 
 # Create server
 $endpoint = New-Object System.Net.IPEndPoint([System.Net.IpAddress]::Any, $port)
