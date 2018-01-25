@@ -1,4 +1,3 @@
-#Your handler URL - edit as needed
 function http-backdoor {
 param(
     [Parameter(Mandatory=$true)]
